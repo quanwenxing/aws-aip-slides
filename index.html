@@ -1,0 +1,1994 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS認定 生成AIデベロッパー - プロフェッショナル (AIP-C01) 試験対策</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;700;900&display=swap');
+
+  :root {
+    --navy: #232F3E;
+    --navy-light: #2d3a4a;
+    --navy-dark: #1a2332;
+    --orange: #FF9900;
+    --orange-light: #FFB84D;
+    --orange-dark: #E68A00;
+    --white: #FFFFFF;
+    --gray-50: #F8F9FA;
+    --gray-100: #E9ECEF;
+    --gray-200: #DEE2E6;
+    --gray-300: #CED4DA;
+    --gray-600: #6C757D;
+    --gray-800: #343A40;
+    --accent-blue: #4A90D9;
+    --accent-green: #27AE60;
+    --accent-purple: #8E44AD;
+    --accent-red: #E74C3C;
+    --accent-teal: #1ABC9C;
+    --accent-pink: #E91E63;
+    --accent-indigo: #3F51B5;
+    --accent-amber: #FFC107;
+    --accent-cyan: #00BCD4;
+    --section-1: #4A90D9;
+    --section-2: #27AE60;
+    --section-3: #8E44AD;
+    --section-4: #E74C3C;
+    --section-5: #1ABC9C;
+    --section-6: #E91E63;
+    --section-7: #3F51B5;
+    --section-8: #FFC107;
+    --section-9: #00BCD4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    font-family: 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--navy-dark);
+    color: var(--gray-800);
+  }
+
+  /* Progress Bar */
+  #progress-bar {
+    position: fixed; top: 0; left: 0; height: 4px;
+    background: linear-gradient(90deg, var(--orange), var(--orange-light));
+    z-index: 1000; transition: width 0.3s ease;
+  }
+
+  /* Slide Counter */
+  #slide-counter {
+    position: fixed; bottom: 20px; right: 30px;
+    color: rgba(255,255,255,0.5); font-size: 14px;
+    z-index: 1000; font-weight: 500;
+    background: rgba(0,0,0,0.3); padding: 6px 14px;
+    border-radius: 20px; backdrop-filter: blur(4px);
+  }
+
+  /* Navigation */
+  .nav-btn {
+    position: fixed; top: 50%; transform: translateY(-50%);
+    z-index: 1000; background: rgba(255,153,0,0.15);
+    border: 1px solid rgba(255,153,0,0.3);
+    color: var(--orange); width: 44px; height: 44px;
+    border-radius: 50%; cursor: pointer; font-size: 18px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s ease; backdrop-filter: blur(4px);
+  }
+  .nav-btn:hover { background: var(--orange); color: var(--white); }
+  #prev-btn { left: 16px; }
+  #next-btn { right: 16px; }
+
+  /* Slide Container */
+  #slides-container {
+    width: 100%; height: 100%;
+    position: relative; overflow: hidden;
+  }
+
+  .slide {
+    position: absolute; top: 0; left: 0;
+    width: 100%; height: 100%;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: clamp(30px, 5vh, 60px) clamp(40px, 8vw, 120px);
+    opacity: 0; transform: translateX(60px);
+    transition: opacity 0.45s ease, transform 0.45s ease;
+    pointer-events: none; overflow-y: auto;
+  }
+  .slide.active {
+    opacity: 1; transform: translateX(0);
+    pointer-events: auto;
+  }
+  .slide.exit-left {
+    opacity: 0; transform: translateX(-60px);
+  }
+
+  /* Slide Types */
+  .slide-title {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-dark) 100%);
+    color: var(--white); text-align: center;
+  }
+  .slide-section {
+    color: var(--white); text-align: center;
+  }
+  .slide-content {
+    background: var(--gray-50);
+  }
+
+  /* Title Slide Styles */
+  .slide-title h1 {
+    font-size: clamp(28px, 4vw, 56px); font-weight: 900;
+    margin-bottom: 16px; line-height: 1.3;
+  }
+  .slide-title h1 .highlight { color: var(--orange); }
+  .slide-title h2 {
+    font-size: clamp(16px, 2vw, 28px); font-weight: 300;
+    color: rgba(255,255,255,0.8); margin-bottom: 24px;
+  }
+  .slide-title .badge {
+    display: inline-block; background: var(--orange);
+    color: var(--navy); padding: 8px 24px; border-radius: 30px;
+    font-weight: 700; font-size: clamp(12px, 1.2vw, 16px);
+    margin-top: 8px;
+  }
+  .slide-title .subtitle {
+    font-size: clamp(13px, 1.4vw, 18px); color: rgba(255,255,255,0.6);
+    margin-top: 20px; max-width: 700px; line-height: 1.7;
+  }
+
+  /* Section Title Slides */
+  .slide-section h2 {
+    font-size: clamp(14px, 1.4vw, 20px); font-weight: 500;
+    text-transform: uppercase; letter-spacing: 3px;
+    margin-bottom: 12px; opacity: 0.7;
+  }
+  .slide-section h1 {
+    font-size: clamp(28px, 3.5vw, 52px); font-weight: 900;
+    margin-bottom: 20px;
+  }
+  .slide-section .section-number {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(255,255,255,0.15); font-size: 24px;
+    font-weight: 700; margin-bottom: 20px;
+    border: 2px solid rgba(255,255,255,0.3);
+  }
+  .slide-section .section-desc {
+    font-size: clamp(14px, 1.5vw, 20px); opacity: 0.7;
+    max-width: 600px; line-height: 1.6;
+  }
+
+  /* Content Slides */
+  .slide-content .slide-header {
+    width: 100%; max-width: 1100px; margin-bottom: clamp(16px, 2.5vh, 32px);
+  }
+  .slide-content .slide-header h2 {
+    font-size: clamp(10px, 1vw, 13px); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2px;
+    margin-bottom: 6px;
+  }
+  .slide-content .slide-header h1 {
+    font-size: clamp(22px, 2.8vw, 40px); font-weight: 900;
+    color: var(--navy);
+  }
+  .slide-content .slide-header .header-line {
+    width: 60px; height: 4px; border-radius: 2px;
+    margin-top: 10px;
+  }
+
+  /* Cards */
+  .cards {
+    display: grid; gap: clamp(10px, 1.5vh, 18px);
+    width: 100%; max-width: 1100px;
+  }
+  .cards-2 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 400px), 1fr)); }
+  .cards-3 { grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .cards-1 { grid-template-columns: 1fr; }
+
+  .card {
+    background: var(--white); border-radius: 12px;
+    padding: clamp(16px, 2vh, 24px); box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--orange);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  }
+  .card h3 {
+    font-size: clamp(14px, 1.3vw, 18px); font-weight: 700;
+    color: var(--navy); margin-bottom: 8px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card h3 .icon { font-size: 20px; }
+  .card ul {
+    list-style: none; padding: 0;
+  }
+  .card ul li {
+    font-size: clamp(12px, 1.1vw, 15px); color: var(--gray-600);
+    padding: 3px 0 3px 18px; position: relative; line-height: 1.6;
+  }
+  .card ul li::before {
+    content: ''; position: absolute; left: 0; top: 11px;
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--orange);
+  }
+  .card p {
+    font-size: clamp(12px, 1.1vw, 15px); color: var(--gray-600);
+    line-height: 1.7;
+  }
+
+  /* List layout */
+  .list-items {
+    width: 100%; max-width: 1100px;
+  }
+  .list-items ul {
+    list-style: none; columns: 2; column-gap: 30px;
+  }
+  .list-items ul li {
+    font-size: clamp(13px, 1.2vw, 17px); color: var(--gray-800);
+    padding: 8px 0 8px 24px; position: relative; line-height: 1.6;
+    break-inside: avoid;
+  }
+  .list-items ul li::before {
+    content: ''; position: absolute; left: 0; top: 14px;
+    width: 8px; height: 8px; border-radius: 2px; transform: rotate(45deg);
+  }
+
+  /* TOC */
+  .toc-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 12px; width: 100%; max-width: 1100px;
+  }
+  .toc-item {
+    background: rgba(255,255,255,0.08); border-radius: 10px;
+    padding: 16px 20px; cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.2s ease; display: flex; align-items: center; gap: 14px;
+  }
+  .toc-item:hover {
+    background: rgba(255,153,0,0.15); border-color: var(--orange);
+    transform: translateX(4px);
+  }
+  .toc-item .toc-num {
+    width: 36px; height: 36px; border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; flex-shrink: 0;
+    color: var(--white);
+  }
+  .toc-item .toc-text {
+    font-size: clamp(13px, 1.2vw, 16px); color: var(--white);
+    font-weight: 500;
+  }
+
+  /* End slide */
+  .slide-end {
+    background: linear-gradient(135deg, var(--navy) 0%, #1a2332 50%, #162029 100%);
+    color: var(--white); text-align: center;
+  }
+  .slide-end h1 {
+    font-size: clamp(32px, 4vw, 60px); font-weight: 900;
+    margin-bottom: 16px;
+  }
+  .slide-end p {
+    font-size: clamp(16px, 1.8vw, 24px); opacity: 0.7;
+  }
+
+  /* Print */
+  @media print {
+    body { overflow: visible; }
+    .slide {
+      position: relative; page-break-after: always;
+      opacity: 1 !important; transform: none !important;
+      pointer-events: auto !important;
+      height: 100vh; min-height: 100vh;
+    }
+    #progress-bar, #slide-counter, .nav-btn { display: none; }
+  }
+
+  /* Small screens */
+  @media (max-width: 768px) {
+    .slide { padding: 20px 24px; }
+    .nav-btn { width: 36px; height: 36px; font-size: 14px; }
+    #prev-btn { left: 8px; }
+    #next-btn { right: 8px; }
+    .list-items ul { columns: 1; }
+    .cards-2, .cards-3 { grid-template-columns: 1fr; }
+  }
+
+  /* AWS decorative elements */
+  .aws-logo {
+    font-size: clamp(12px, 1vw, 15px); font-weight: 700;
+    color: var(--orange); letter-spacing: 2px;
+    margin-bottom: 16px;
+  }
+
+  /* Accent colors for section headers */
+  .accent-1 { color: var(--section-1); }
+  .accent-2 { color: var(--section-2); }
+  .accent-3 { color: var(--section-3); }
+  .accent-4 { color: var(--section-4); }
+  .accent-5 { color: var(--section-5); }
+  .accent-6 { color: var(--section-6); }
+  .accent-7 { color: var(--section-7); }
+  .accent-8 { color: var(--section-8); }
+  .accent-9 { color: var(--section-9); }
+
+  .bg-1 { background: linear-gradient(135deg, #1e3a5f 0%, #0d1f33 100%); }
+  .bg-2 { background: linear-gradient(135deg, #1a3d2e 0%, #0d2018 100%); }
+  .bg-3 { background: linear-gradient(135deg, #2e1a3d 0%, #1a0d26 100%); }
+  .bg-4 { background: linear-gradient(135deg, #3d1a1a 0%, #260d0d 100%); }
+  .bg-5 { background: linear-gradient(135deg, #1a3d38 0%, #0d2621 100%); }
+  .bg-6 { background: linear-gradient(135deg, #3d1a2e 0%, #260d1a 100%); }
+  .bg-7 { background: linear-gradient(135deg, #1a1e3d 0%, #0d1126 100%); }
+  .bg-8 { background: linear-gradient(135deg, #3d3a1a 0%, #26240d 100%); }
+  .bg-9 { background: linear-gradient(135deg, #1a363d 0%, #0d2126 100%); }
+
+  .border-1 { border-left-color: var(--section-1); }
+  .border-2 { border-left-color: var(--section-2); }
+  .border-3 { border-left-color: var(--section-3); }
+  .border-4 { border-left-color: var(--section-4); }
+  .border-5 { border-left-color: var(--section-5); }
+  .border-6 { border-left-color: var(--section-6); }
+  .border-7 { border-left-color: var(--section-7); }
+  .border-8 { border-left-color: var(--section-8); }
+  .border-9 { border-left-color: var(--section-9); }
+
+  .line-1 { background: var(--section-1); }
+  .line-2 { background: var(--section-2); }
+  .line-3 { background: var(--section-3); }
+  .line-4 { background: var(--section-4); }
+  .line-5 { background: var(--section-5); }
+  .line-6 { background: var(--section-6); }
+  .line-7 { background: var(--section-7); }
+  .line-8 { background: var(--section-8); }
+  .line-9 { background: var(--section-9); }
+
+  .dot-1 li::before { background: var(--section-1); }
+  .dot-2 li::before { background: var(--section-2); }
+  .dot-3 li::before { background: var(--section-3); }
+  .dot-4 li::before { background: var(--section-4); }
+  .dot-5 li::before { background: var(--section-5); }
+  .dot-6 li::before { background: var(--section-6); }
+  .dot-7 li::before { background: var(--section-7); }
+  .dot-8 li::before { background: var(--section-8); }
+  .dot-9 li::before { background: var(--section-9); }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="slide-counter">1 / 50</div>
+<button class="nav-btn" id="prev-btn">&#9664;</button>
+<button class="nav-btn" id="next-btn">&#9654;</button>
+
+<div id="slides-container">
+
+<!-- ===== SLIDE 1: Title ===== -->
+<div class="slide slide-title active">
+  <div class="aws-logo">AWS CERTIFIED</div>
+  <h1><span class="highlight">生成AI</span>デベロッパー<br>プロフェッショナル</h1>
+  <h2>AIP-C01 試験対策スライド</h2>
+  <span class="badge">EXAM PREPARATION</span>
+  <p class="subtitle">AWS認定試験のための包括的な学習ガイド</p>
+</div>
+
+<!-- ===== SLIDE 2: Course Overview ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1</h2>
+    <h1>コース概要</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-1">
+      <h3>試験概要</h3>
+      <ul class="dot-1">
+        <li>AWS認定 生成AIデベロッパー - プロフェッショナル (AIP-C01)</li>
+        <li>生成AIソリューションの設計・実装・運用能力を評価</li>
+      </ul>
+    </div>
+    <div class="card border-1">
+      <h3>対象者</h3>
+      <ul class="dot-1">
+        <li>AWS 2年以上の実務経験</li>
+        <li>ML/AI分野の経験</li>
+        <li>生成AIソリューション実装 1年以上</li>
+      </ul>
+    </div>
+    <div class="card border-1">
+      <h3>前提知識</h3>
+      <ul class="dot-1">
+        <li>AWSの基礎知識（ストレージ、セキュリティなど）が必要</li>
+        <li>初めてのAWS認定にはおすすめしない</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 3: TOC ===== -->
+<div class="slide slide-section bg-1">
+  <h2>全体構成</h2>
+  <h1>目次</h1>
+  <div class="toc-grid" style="margin-top:24px;">
+    <div class="toc-item" onclick="goToSlide(4)"><div class="toc-num" style="background:var(--section-1)">1</div><div class="toc-text">生成AI基礎とBedrock</div></div>
+    <div class="toc-item" onclick="goToSlide(12)"><div class="toc-num" style="background:var(--section-2)">2</div><div class="toc-text">生成AIのためのデータ管理</div></div>
+    <div class="toc-item" onclick="goToSlide(25)"><div class="toc-num" style="background:var(--section-3)">3</div><div class="toc-text">エージェントAI</div></div>
+    <div class="toc-item" onclick="goToSlide(30)"><div class="toc-num" style="background:var(--section-4)">4</div><div class="toc-text">運用効率と最適化</div></div>
+    <div class="toc-item" onclick="goToSlide(33)"><div class="toc-num" style="background:var(--section-5)">5</div><div class="toc-text">SageMaker AIによるモデル管理</div></div>
+    <div class="toc-item" onclick="goToSlide(40)"><div class="toc-num" style="background:var(--section-6)">6</div><div class="toc-text">AIアプリ構築のためのツール</div></div>
+    <div class="toc-item" onclick="goToSlide(47)"><div class="toc-num" style="background:var(--section-7)">7</div><div class="toc-text">ガバナンスとQA</div></div>
+    <div class="toc-item" onclick="goToSlide(51)"><div class="toc-num" style="background:var(--section-8)">8</div><div class="toc-text">セキュリティ、ID、コンプライアンス</div></div>
+    <div class="toc-item" onclick="goToSlide(59)"><div class="toc-num" style="background:var(--section-9)">9</div><div class="toc-text">その他知っておくべきサービス</div></div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 4: Section 1 Title ===== -->
+<div class="slide slide-section bg-1">
+  <div class="section-number">1</div>
+  <h2>SECTION 1</h2>
+  <h1>生成AI基礎とBedrock</h1>
+  <p class="section-desc">基盤モデル、Amazon Bedrock、RAG、ガードレール、プロンプトエンジニアリング</p>
+</div>
+
+<!-- ===== SLIDE 5: Foundation Models ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - 生成AI基礎とBedrock</h2>
+    <h1>基盤モデル (Foundation Models)</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-1">
+      <h3>基盤モデルとは</h3>
+      <ul class="dot-1">
+        <li>大規模な事前学習済みTransformerモデル</li>
+        <li>特定タスクへのファインチューニングが可能</li>
+        <li>新しいアプリケーションへの適用</li>
+      </ul>
+    </div>
+    <div class="card border-1">
+      <h3>主なモデル</h3>
+      <ul class="dot-1">
+        <li>GPT (OpenAI) - テキスト生成</li>
+        <li>Claude (Anthropic) - 会話・分析</li>
+        <li>DALL-E - 画像生成</li>
+        <li>LLaMA (Meta) - オープンソースLLM</li>
+        <li>DeepSeek - コード・推論特化</li>
+        <li>Amazon Nova - AWSネイティブ</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 6: AWS Foundation Models ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - 生成AI基礎とBedrock</h2>
+    <h1>AWSの基盤モデル</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-1">
+      <h3>Jurassic-2 (AI21 Labs)</h3>
+      <p>多言語LLM（スペイン語、フランス語、ドイツ語等）</p>
+    </div>
+    <div class="card border-1">
+      <h3>Claude (Anthropic)</h3>
+      <p>会話、質問応答、ワークフロー自動化</p>
+    </div>
+    <div class="card border-1">
+      <h3>Stable Diffusion</h3>
+      <p>画像・アート・ロゴ生成 (stability.ai)</p>
+    </div>
+    <div class="card border-1">
+      <h3>Llama (Meta)</h3>
+      <p>オープンソースの大規模言語モデル</p>
+    </div>
+    <div class="card border-1">
+      <h3>Amazon Titan</h3>
+      <p>テキスト要約、生成、Q&A、エンベディング</p>
+    </div>
+    <div class="card border-1">
+      <h3>Amazon Nova</h3>
+      <p>Nova Pro: LLMポートフォリオ / Nova Reels: ビデオ生成</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 7: Amazon Bedrock ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - 生成AI基礎とBedrock</h2>
+    <h1>Amazon Bedrock</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-1">
+      <h3>概要</h3>
+      <ul class="dot-1">
+        <li>フルマネージド生成AIサービス</li>
+        <li>複数の基盤モデルにアクセス可能</li>
+        <li>サーバーレスで即座に利用開始</li>
+      </ul>
+    </div>
+    <div class="card border-1">
+      <h3>主要機能</h3>
+      <ul class="dot-1">
+        <li>ファインチューニング</li>
+        <li>RAG（検索拡張生成）</li>
+        <li>ガードレール</li>
+        <li>プロンプトエンジニアリング</li>
+        <li>プロンプトフロー</li>
+      </ul>
+    </div>
+    <div class="card border-1" style="grid-column: 1 / -1;">
+      <h3>エンタープライズ統合</h3>
+      <p>セキュリティ、プライバシー、ガバナンス機能を備え、企業のAIワークロードに最適化。VPCエンドポイント、IAM統合、CloudTrailログ対応。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 8: RAG ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - 生成AI基礎とBedrock</h2>
+    <h1>RAG（検索拡張生成）</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-1">
+      <h3>RAGとは</h3>
+      <ul class="dot-1">
+        <li>Retrieval-Augmented Generation</li>
+        <li>外部データソースを活用してモデルの回答精度を向上</li>
+        <li>ハルシネーションの低減</li>
+      </ul>
+    </div>
+    <div class="card border-1">
+      <h3>主要コンポーネント</h3>
+      <ul class="dot-1">
+        <li>ナレッジベース / ベクトルDB</li>
+        <li>エンベディングベクトルの最適化</li>
+        <li>チャンキング戦略（固定サイズ、セマンティック）</li>
+      </ul>
+    </div>
+    <div class="card border-1" style="grid-column: 1 / -1;">
+      <h3>Bedrockナレッジベース</h3>
+      <p>S3のドキュメントを自動的にインデックス化し、ベクトルストア（OpenSearch、Aurora pgvector等）に保存。クエリ時に関連ドキュメントを検索し、LLMの回答に組み込む。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 9: Guardrails ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - 生成AI基礎とBedrock</h2>
+    <h1>ガードレール</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-1">
+      <h3>Bedrockガードレール</h3>
+      <ul class="dot-1">
+        <li>モデル出力を制御・フィルタリング</li>
+        <li>有害コンテンツのフィルタリング</li>
+        <li>トピック制限の設定</li>
+      </ul>
+    </div>
+    <div class="card border-1">
+      <h3>データ保護</h3>
+      <ul class="dot-1">
+        <li>PII（個人識別情報）の検出と処理</li>
+        <li>機密情報のマスキング</li>
+        <li>コンプライアンス要件への対応</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 10: Prompt Engineering ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - 生成AI基礎とBedrock</h2>
+    <h1>プロンプトエンジニアリング</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-1">
+      <h3>Zero-shot</h3>
+      <p>例示なしでタスクを指示。モデルの事前学習知識のみに依存。</p>
+    </div>
+    <div class="card border-1">
+      <h3>Few-shot</h3>
+      <p>数個の例を提示してタスクを指示。パターン認識を促進。</p>
+    </div>
+    <div class="card border-1">
+      <h3>Chain-of-thought</h3>
+      <p>段階的な推論プロセスを指示。複雑な問題解決に効果的。</p>
+    </div>
+    <div class="card border-1" style="grid-column: 1 / -1;">
+      <h3>Bedrockプロンプトフロー</h3>
+      <ul class="dot-1">
+        <li>プロンプトの反復的な改善とテスト</li>
+        <li>ビジュアルなフロー設計</li>
+        <li>バージョン管理と比較</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 11: Section 1 まとめ (buffer) ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-1">Section 1 - まとめ</h2>
+    <h1>生成AI基礎とBedrock 重要ポイント</h1>
+    <div class="header-line line-1"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-1">
+      <h3>試験で押さえるべきポイント</h3>
+      <ul class="dot-1">
+        <li>基盤モデルの種類と特徴（テキスト、画像、マルチモーダル）</li>
+        <li>Amazon Bedrockの機能と利点（マネージド、複数モデル対応）</li>
+        <li>RAGの仕組みとナレッジベース構成</li>
+        <li>ガードレールによる出力制御とPII保護</li>
+        <li>プロンプトエンジニアリングの手法（Zero-shot, Few-shot, CoT）</li>
+        <li>ファインチューニング vs RAGの使い分け</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 12: Section 2 Title ===== -->
+<div class="slide slide-section bg-2">
+  <div class="section-number">2</div>
+  <h2>SECTION 2</h2>
+  <h1>生成AIのためのデータ管理</h1>
+  <p class="section-desc">データ変換、ETL、ストレージ、監視サービス</p>
+</div>
+
+<!-- ===== SLIDE 13: Data Management Overview ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>データ管理の概要</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-2">
+      <h3>データ変換</h3>
+      <ul class="dot-2">
+        <li>データの構造化と前処理</li>
+        <li>AWS Glue ETL</li>
+        <li>SageMaker Data Wrangler</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>テキスト・音声処理</h3>
+      <ul class="dot-2">
+        <li>Amazon Transcribe（音声→テキスト）</li>
+        <li>Amazon Comprehend（NLP）</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>監視</h3>
+      <ul class="dot-2">
+        <li>Amazon CloudWatch</li>
+        <li>メトリクスとログ管理</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 14: AWS Glue ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>AWS Glue</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>概要</h3>
+      <ul class="dot-2">
+        <li>サーバーレスなテーブル定義とETL</li>
+        <li>データソース: S3、RDS、Redshift、DynamoDB</li>
+        <li>カスタムETLジョブ（トリガー、スケジュール、オンデマンド）</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>主要コンポーネント</h3>
+      <ul class="dot-2">
+        <li>Glue Crawler: S3データをスキャンしスキーマ作成</li>
+        <li>Glue Data Catalog: テーブル定義の保存</li>
+        <li>Glue Studio: ETLワークフローのビジュアルUI</li>
+        <li>Glue Data Quality: DQDL（データ品質定義言語）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 15: S3 Partitions ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>S3パーティション</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>パーティション戦略</h3>
+      <ul class="dot-2">
+        <li>クエリパターンに基づくバケット構成</li>
+        <li>事前にクエリパターンを検討することが重要</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>パーティション例</h3>
+      <ul class="dot-2">
+        <li>時間範囲クエリ: <code>yyyy/mm/dd/device</code></li>
+        <li>デバイスクエリ: <code>device/yyyy/mm/dd</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 16: CloudWatch ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon CloudWatch</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>メトリクス</h3>
+      <ul class="dot-2">
+        <li>すべてのAWSサービスのメトリクス提供</li>
+        <li>メトリクス = 監視変数（CPU使用率、ネットワーク等）</li>
+        <li>名前空間、ディメンション（最大30）、タイムスタンプ</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>機能</h3>
+      <ul class="dot-2">
+        <li>ダッシュボード作成</li>
+        <li>カスタムメトリクス</li>
+        <li>CloudWatch Metric Streams: ほぼリアルタイム配信</li>
+        <li>アラーム設定</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 17: Transcribe ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon Transcribe</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-2">
+      <h3>音声→テキスト変換（ASR）</h3>
+      <ul class="dot-2">
+        <li>音声をテキストに自動変換</li>
+        <li>PIIの自動除去（リダクション）</li>
+        <li>多言語音声の自動言語識別</li>
+        <li>カスタム語彙・カスタム言語モデルで精度向上</li>
+        <li>毒性検出機能（ハラスメント、ヘイトスピーチ等）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 18: Comprehend ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon Comprehend</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>NLP機能</h3>
+      <ul class="dot-2">
+        <li>言語検出、キーフレーズ抽出</li>
+        <li>感情分析</li>
+        <li>固有表現認識（NER）</li>
+        <li>カスタム分類・カスタムエンティティ認識</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>特殊機能</h3>
+      <ul class="dot-2">
+        <li>Comprehend Medical: HIPAA準拠の医療データ抽出</li>
+        <li>Lambda + Comprehendでデータ品質向上</li>
+        <li>PII除去、エンティティ抽出</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 19: OpenSearch ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon OpenSearch Service</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>概要</h3>
+      <ul class="dot-2">
+        <li>Elasticsearch/Kibanaのフォーク</li>
+        <li>検索エンジン、分析、可視化、パイプライン</li>
+        <li>ドキュメント、インデックス、シャードの概念</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>ストレージとAI連携</h3>
+      <ul class="dot-2">
+        <li>プライマリシャードとレプリカによる冗長性</li>
+        <li>Hot/Warm/Cold/UltraWarmストレージ</li>
+        <li>ベクトルストア対応（Bedrock KB連携）</li>
+        <li>サーバーレスオプションあり</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 20: RDS / Aurora ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon RDS / Aurora</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>Amazon RDS</h3>
+      <ul class="dot-2">
+        <li>マネージドリレーショナルDB</li>
+        <li>MySQL、PostgreSQL、Oracle、SQL Server等</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>Amazon Aurora</h3>
+      <ul class="dot-2">
+        <li>AWSクラウド向け高性能リレーショナルDB</li>
+        <li>Aurora pgvector: PostgreSQL拡張でベクトル検索対応</li>
+        <li>Bedrock Knowledge Baseのバックエンドとして利用可能</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 21: DynamoDB ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon DynamoDB</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>基本機能</h3>
+      <ul class="dot-2">
+        <li>フルマネージドNoSQL（キーバリュー）DB</li>
+        <li>結果整合性 vs 強力な整合性</li>
+        <li>RCU/WCU: キャパシティユニットの計算</li>
+        <li>スロットリング対策: 指数バックオフ</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>高度な機能と生成AI活用</h3>
+      <ul class="dot-2">
+        <li>DAX: インメモリキャッシュ（マイクロ秒レイテンシ）</li>
+        <li>TTL: 自動アイテム削除</li>
+        <li>ベクトルストアではないが、チャット履歴保存に最適</li>
+        <li>OpenSearchとのZero-ETL統合</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 22: S3 ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>Amazon S3</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-2">
+      <h3>基本機能</h3>
+      <ul class="dot-2">
+        <li>オブジェクトストレージサービス</li>
+        <li>ストレージクラス（Standard、IA、Glacier等）</li>
+        <li>バージョニング、ライフサイクルポリシー</li>
+      </ul>
+    </div>
+    <div class="card border-2">
+      <h3>セキュリティと活用</h3>
+      <ul class="dot-2">
+        <li>暗号化（SSE-S3、SSE-KMS、SSE-C）</li>
+        <li>データレイクの基盤</li>
+        <li>Bedrock Knowledge Baseのデータソース</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 23: Vector Store Updates ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - データ管理</h2>
+    <h1>ベクトルストアの更新</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-2">
+      <h3>同期戦略</h3>
+      <ul class="dot-2">
+        <li>新データ・変更データとの同期が必要</li>
+        <li>インクリメンタル更新によるコスト最適化</li>
+        <li>リアルタイム変更検出</li>
+        <li>自動同期、スケジュール更新パイプライン</li>
+        <li>EventBridgeで変更イベントを検知し更新トリガー</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 24: Section 2 Summary ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-2">Section 2 - まとめ</h2>
+    <h1>データ管理 重要ポイント</h1>
+    <div class="header-line line-2"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-2">
+      <h3>試験で押さえるべきポイント</h3>
+      <ul class="dot-2">
+        <li>Glueの各コンポーネント（Crawler、Data Catalog、Studio、Data Quality）</li>
+        <li>OpenSearchのベクトルストア機能とBedrock KB連携</li>
+        <li>Aurora pgvectorによるベクトル検索</li>
+        <li>DynamoDBのチャット履歴保存ユースケース</li>
+        <li>TranscribeとComprehendの前処理パイプライン</li>
+        <li>ベクトルストアの更新戦略とEventBridge連携</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 25: Section 3 Title ===== -->
+<div class="slide slide-section bg-3">
+  <div class="section-number">3</div>
+  <h2>SECTION 3</h2>
+  <h1>エージェントAI</h1>
+  <p class="section-desc">Bedrockエージェント、ヒューマン・イン・ザ・ループ、Amazon Q</p>
+</div>
+
+<!-- ===== SLIDE 26: Bedrock Agents ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-3">Section 3 - エージェントAI</h2>
+    <h1>Bedrockエージェント</h1>
+    <div class="header-line line-3"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-3">
+      <h3>エージェント構築</h3>
+      <ul class="dot-3">
+        <li>Bedrock上でのエージェント構築</li>
+        <li>マルチエージェントワークフロー</li>
+        <li>外部APIとの連携（アクショングループ）</li>
+      </ul>
+    </div>
+    <div class="card border-3">
+      <h3>関連サービス</h3>
+      <ul class="dot-3">
+        <li>Strands Agents: エージェントフレームワーク</li>
+        <li>AgentCore: エージェント基盤</li>
+        <li>ヒューマン・イン・ザ・ループ統合</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 27: Human-in-the-Loop ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-3">Section 3 - エージェントAI</h2>
+    <h1>ヒューマン・イン・ザ・ループ</h1>
+    <div class="header-line line-3"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-3">
+      <h3>ヒューマン拡張パターン</h3>
+      <ul class="dot-3">
+        <li>AIがドラフト作成 → 人間が精査</li>
+        <li>信頼度スコアやリスク評価に基づくエスカレーション</li>
+      </ul>
+    </div>
+    <div class="card border-3">
+      <h3>実装パターン</h3>
+      <ul class="dot-3">
+        <li>API Gateway + DynamoDBでフィードバック収集</li>
+        <li>モデル/バリアント比較に活用</li>
+        <li>承認ワークフロー</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 28: Amazon Q Business ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-3">Section 3 - エージェントAI</h2>
+    <h1>Amazon Q Business</h1>
+    <div class="header-line line-3"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-3">
+      <h3>概要</h3>
+      <ul class="dot-3">
+        <li>社内データベースの生成AIアシスタント</li>
+        <li>40以上のデータソースコネクタ（S3、RDS、Slack等）</li>
+        <li>プラグイン（Jira、ServiceNow等）</li>
+      </ul>
+    </div>
+    <div class="card border-3">
+      <h3>セキュリティ</h3>
+      <ul class="dot-3">
+        <li>IAM Identity Centerによる認証・アクセス制御</li>
+        <li>管理者コントロール（ガードレール）</li>
+        <li>ドキュメントレベルのアクセス制御</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 29: Amazon Q Developer ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-3">Section 3 - エージェントAI</h2>
+    <h1>Amazon Q Developer</h1>
+    <div class="header-line line-3"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-3">
+      <h3>開発者向けAIアシスタント</h3>
+      <ul class="dot-3">
+        <li>AWSドキュメントに関する質問応答</li>
+        <li>AWSアカウント内のリソースに関する回答</li>
+        <li>CLI提案、コード生成、コード変換</li>
+        <li>請求分析、エラー解決、トラブルシューティング</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 30: Section 4 Title ===== -->
+<div class="slide slide-section bg-4">
+  <div class="section-number">4</div>
+  <h2>SECTION 4</h2>
+  <h1>運用効率と最適化</h1>
+  <p class="section-desc">トークン管理、モデル選択、キャッシング、Cross-Region Inference</p>
+</div>
+
+<!-- ===== SLIDE 31: Optimization Overview ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-4">Section 4 - 運用効率と最適化</h2>
+    <h1>運用最適化の概要</h1>
+    <div class="header-line line-4"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-4">
+      <h3>コンテキスト管理</h3>
+      <ul class="dot-4">
+        <li>トークン効率の最適化</li>
+        <li>コンテキストウィンドウの効率的な利用</li>
+      </ul>
+    </div>
+    <div class="card border-4">
+      <h3>モデル選択</h3>
+      <ul class="dot-4">
+        <li>ユースケースに適したモデル選定</li>
+        <li>コスト vs 性能のトレードオフ</li>
+      </ul>
+    </div>
+    <div class="card border-4">
+      <h3>インフラ最適化</h3>
+      <ul class="dot-4">
+        <li>リソース使用率とスループット</li>
+        <li>Bedrock Cross-Region Inference</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 32: Token Management ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-4">Section 4 - 運用効率と最適化</h2>
+    <h1>トークン管理とキャッシング</h1>
+    <div class="header-line line-4"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-4">
+      <h3>トークン効率化</h3>
+      <ul class="dot-4">
+        <li>プロンプトのトークン効率最適化</li>
+        <li>不要な冗長性の削減</li>
+        <li>コスト最適化戦略</li>
+      </ul>
+    </div>
+    <div class="card border-4">
+      <h3>キャッシング戦略</h3>
+      <ul class="dot-4">
+        <li>Bedrockプロンプトキャッシング</li>
+        <li>頻繁なリクエストのレスポンスキャッシュ</li>
+        <li>レイテンシ削減とコスト効率向上</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 33: Section 5 Title ===== -->
+<div class="slide slide-section bg-5">
+  <div class="section-number">5</div>
+  <h2>SECTION 5</h2>
+  <h1>SageMaker AIによるモデル管理</h1>
+  <p class="section-desc">トレーニング、デプロイ、監視、MLOps</p>
+</div>
+
+<!-- ===== SLIDE 34: SageMaker Overview ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-5">Section 5 - SageMaker AI</h2>
+    <h1>SageMaker概要</h1>
+    <div class="header-line line-5"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-5">
+      <h3>コア機能</h3>
+      <ul class="dot-5">
+        <li>処理（Processing）</li>
+        <li>トレーニング</li>
+        <li>デプロイメント</li>
+      </ul>
+    </div>
+    <div class="card border-5">
+      <h3>品質管理</h3>
+      <ul class="dot-5">
+        <li>Ground Truth（データラベリング）</li>
+        <li>Model Monitor（モデル監視）</li>
+        <li>Clarify（説明可能性、バイアス検出）</li>
+      </ul>
+    </div>
+    <div class="card border-5">
+      <h3>運用</h3>
+      <ul class="dot-5">
+        <li>デプロイメントのセーフガード</li>
+        <li>Auto Scaling</li>
+        <li>A/Bテスト</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 35: Data Wrangler ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-5">Section 5 - SageMaker AI</h2>
+    <h1>SageMaker Data Wrangler</h1>
+    <div class="header-line line-5"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-5">
+      <h3>データ準備ツール</h3>
+      <ul class="dot-5">
+        <li>データの取り込み、可視化、変換をノーコードで実現</li>
+        <li>Quick Model: 素早いモデル評価</li>
+        <li>データフローのエクスポート（Processing Job、Pipeline、Python）</li>
+        <li>300以上の組み込み変換</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 36: Model Monitor ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-5">Section 5 - SageMaker AI</h2>
+    <h1>SageMaker Model Monitor</h1>
+    <div class="header-line line-5"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-5">
+      <h3>ドリフト検出</h3>
+      <ul class="dot-5">
+        <li>データ品質のドリフト検出</li>
+        <li>モデル品質のドリフト検出</li>
+        <li>バイアスドリフト</li>
+        <li>特徴量帰属ドリフト（NDCGスコア）</li>
+      </ul>
+    </div>
+    <div class="card border-5">
+      <h3>統合</h3>
+      <ul class="dot-5">
+        <li>CloudWatchとの統合</li>
+        <li>アラート設定</li>
+        <li>自動再トレーニングトリガー</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 37: Model Registry ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-5">Section 5 - SageMaker AI</h2>
+    <h1>SageMaker Model Registry</h1>
+    <div class="header-line line-5"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-5">
+      <h3>モデルライフサイクル管理</h3>
+      <ul class="dot-5">
+        <li>モデルのカタログ化とバージョン管理</li>
+        <li>メタデータの関連付け</li>
+        <li>承認ステータスの管理（Approved / Rejected / Pending）</li>
+        <li>CI/CDによる自動デプロイ</li>
+        <li>モデル共有（クロスアカウント）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 38: ML Lineage Tracking ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-5">Section 5 - SageMaker AI</h2>
+    <h1>SageMaker ML Lineage Tracking</h1>
+    <div class="header-line line-5"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-5">
+      <h3>追跡機能</h3>
+      <ul class="dot-5">
+        <li>MLワークフローの追跡（MLOps）</li>
+        <li>監査とコンプライアンス</li>
+        <li>クロスアカウントリネージ</li>
+      </ul>
+    </div>
+    <div class="card border-5">
+      <h3>エンティティ</h3>
+      <ul class="dot-5">
+        <li>Trial Component: 個別ステップ</li>
+        <li>Trial: 実験の実行</li>
+        <li>Experiment: 実験グループ</li>
+        <li>Context: コンテキスト情報</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 39: Neo + Pipelines ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-5">Section 5 - SageMaker AI</h2>
+    <h1>SageMaker Neo + Pipelines</h1>
+    <div class="header-line line-5"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-5">
+      <h3>SageMaker Neo</h3>
+      <ul class="dot-5">
+        <li>エッジデバイス向けモデル最適化</li>
+        <li>IoT Greengrass連携でエッジ推論</li>
+        <li>複数ハードウェアプラットフォーム対応</li>
+      </ul>
+    </div>
+    <div class="card border-5">
+      <h3>SageMaker Pipelines</h3>
+      <ul class="dot-5">
+        <li>MLワークフローのDAG定義</li>
+        <li>再現可能なMLパイプライン</li>
+        <li>SageMaker Unified Studio: 統合UI</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 40: Section 6 Title ===== -->
+<div class="slide slide-section bg-6">
+  <div class="section-number">6</div>
+  <h2>SECTION 6</h2>
+  <h1>AIアプリ構築のためのツール</h1>
+  <p class="section-desc">Lambda、API Gateway、Step Functions、EventBridge、SQS、DevOps</p>
+</div>
+
+<!-- ===== SLIDE 41: Lambda ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-6">Section 6 - AIアプリ構築ツール</h2>
+    <h1>AWS Lambda</h1>
+    <div class="header-line line-6"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-6">
+      <h3>サーバーレスコンピューティング</h3>
+      <ul class="dot-6">
+        <li>イベント駆動型の関数実行</li>
+        <li>最大15分のタイムアウト</li>
+        <li>Bedrockとの統合で推論処理</li>
+        <li>API Gateway、S3、DynamoDB等のイベントソース</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 42: API Gateway ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-6">Section 6 - AIアプリ構築ツール</h2>
+    <h1>API Gateway</h1>
+    <div class="header-line line-6"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-6">
+      <h3>APIの構築と管理</h3>
+      <ul class="dot-6">
+        <li>REST / WebSocket APIの構築</li>
+        <li>Lambda統合、認証、スロットリング</li>
+        <li>APIキー管理、使用量プラン</li>
+        <li>ステージ管理（dev、staging、prod）</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 43: Step Functions ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-6">Section 6 - AIアプリ構築ツール</h2>
+    <h1>Step Functions</h1>
+    <div class="header-line line-6"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-6">
+      <h3>ワークフローオーケストレーション</h3>
+      <ul class="dot-6">
+        <li>サーバーレスなステートマシン</li>
+        <li>複雑なワークフロー管理（並列実行、条件分岐、エラー処理）</li>
+        <li>Bedrockとの統合でAIワークフロー構築</li>
+        <li>ビジュアルワークフローデザイナー</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 44: EventBridge ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-6">Section 6 - AIアプリ構築ツール</h2>
+    <h1>Amazon EventBridge</h1>
+    <div class="header-line line-6"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-6">
+      <h3>イベント駆動型アーキテクチャ</h3>
+      <ul class="dot-6">
+        <li>スケジュール（Cronジョブ）とイベントパターン</li>
+        <li>イベントバス（デフォルト、パートナー、カスタム）</li>
+      </ul>
+    </div>
+    <div class="card border-6">
+      <h3>高度な機能</h3>
+      <ul class="dot-6">
+        <li>Schema Registry</li>
+        <li>リソースベースポリシー</li>
+        <li>クロスアカウント・クロスリージョンイベント</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 45: SQS ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-6">Section 6 - AIアプリ構築ツール</h2>
+    <h1>Amazon SQS</h1>
+    <div class="header-line line-6"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-6">
+      <h3>メッセージキューサービス</h3>
+      <ul class="dot-6">
+        <li>フルマネージドメッセージキュー</li>
+        <li>標準キュー（高スループット）とFIFOキュー（順序保証）</li>
+        <li>Auto Scaling Groupとの連携</li>
+        <li>暗号化（HTTPS、KMS）とアクセス制御</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 46: DevOps Tools ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-6">Section 6 - AIアプリ構築ツール</h2>
+    <h1>DevOpsツール</h1>
+    <div class="header-line line-6"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-6">
+      <h3>CI/CD</h3>
+      <ul class="dot-6">
+        <li>CodeBuild: ビルド</li>
+        <li>CodeDeploy: デプロイ</li>
+        <li>CodePipeline: CI/CD</li>
+      </ul>
+    </div>
+    <div class="card border-6">
+      <h3>AppSync</h3>
+      <ul class="dot-6">
+        <li>GraphQL API</li>
+        <li>リアルタイムデータ同期</li>
+      </ul>
+    </div>
+    <div class="card border-6">
+      <h3>Amplify</h3>
+      <ul class="dot-6">
+        <li>フルスタックWeb/モバイルアプリ</li>
+        <li>フロントエンド + バックエンド</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 47: Section 7 Title ===== -->
+<div class="slide slide-section bg-7">
+  <div class="section-number">7</div>
+  <h2>SECTION 7</h2>
+  <h1>ガバナンスとQA</h1>
+  <p class="section-desc">プロンプト管理、トレーシング、評価手法、責任あるAI</p>
+</div>
+
+<!-- ===== SLIDE 48: Governance Overview ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-7">Section 7 - ガバナンスとQA</h2>
+    <h1>ガバナンス概要</h1>
+    <div class="header-line line-7"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-7">
+      <h3>管理と追跡</h3>
+      <ul class="dot-7">
+        <li>Bedrockプロンプト管理</li>
+        <li>エージェントトレーシング</li>
+        <li>呼び出しログの記録</li>
+      </ul>
+    </div>
+    <div class="card border-7">
+      <h3>品質保証</h3>
+      <ul class="dot-7">
+        <li>モデル評価手法</li>
+        <li>責任あるAI</li>
+        <li>バイアスと公平性の監視</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 49: CW / CT / X-Ray ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-7">Section 7 - ガバナンスとQA</h2>
+    <h1>CloudWatch / CloudTrail / X-Ray</h1>
+    <div class="header-line line-7"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-7">
+      <h3>CloudWatch</h3>
+      <ul class="dot-7">
+        <li>メトリクス、ログ、アラーム</li>
+        <li>Bedrockメトリクスの監視</li>
+      </ul>
+    </div>
+    <div class="card border-7">
+      <h3>CloudTrail</h3>
+      <ul class="dot-7">
+        <li>API呼び出しの記録（監査）</li>
+        <li>コンプライアンス対応</li>
+      </ul>
+    </div>
+    <div class="card border-7">
+      <h3>X-Ray</h3>
+      <ul class="dot-7">
+        <li>分散トレーシング</li>
+        <li>Bedrockモデル呼び出しの追跡</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 50: Lake Formation ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-7">Section 7 - ガバナンスとQA</h2>
+    <h1>AWS Lake Formation</h1>
+    <div class="header-line line-7"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-7">
+      <h3>データレイクの構築と管理</h3>
+      <ul class="dot-7">
+        <li>きめ細かなアクセス制御（列・行・セルレベル）</li>
+        <li>データフィルタ: カラム、行、セルレベルのセキュリティ</li>
+        <li>Glue Data Catalogとの統合</li>
+        <li>データガバナンスの中央管理</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 51: Section 8 Title ===== -->
+<div class="slide slide-section bg-8">
+  <div class="section-number">8</div>
+  <h2>SECTION 8</h2>
+  <h1>セキュリティ、ID、コンプライアンス</h1>
+  <p class="section-desc">IAM、暗号化、データ保護、ネットワークセキュリティ</p>
+</div>
+
+<!-- ===== SLIDE 52: Least Privilege ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>最小権限の原則</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-8">
+      <h3>原則と実践</h3>
+      <ul class="dot-8">
+        <li>タスク実行に必要な権限のみ付与</li>
+        <li>開発時は広い権限 → 本番は厳密に制限</li>
+        <li>IAM Access Analyzerで最小権限ポリシー生成</li>
+        <li>定期的な権限レビューとクリーンアップ</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 53: IAM ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>IAM (Identity and Access Management)</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-8">
+      <h3>基本要素</h3>
+      <ul class="dot-8">
+        <li>ユーザー、グループ、ロール</li>
+        <li>JSONポリシードキュメント</li>
+        <li>ポリシーの継承</li>
+      </ul>
+    </div>
+    <div class="card border-8">
+      <h3>ベストプラクティス</h3>
+      <ul class="dot-8">
+        <li>最小権限の原則</li>
+        <li>MFA（多要素認証）の有効化</li>
+        <li>ロールベースのアクセス制御</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 54: Data Masking ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>データマスキングと匿名化</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-8">
+      <h3>マスキング</h3>
+      <ul class="dot-8">
+        <li>PII・機密データの保護</li>
+        <li>一部隠蔽（例: ****-****-****-1234）</li>
+      </ul>
+    </div>
+    <div class="card border-8">
+      <h3>匿名化手法</h3>
+      <ul class="dot-8">
+        <li>ランダム置換、シャッフル</li>
+        <li>暗号化、ハッシュ</li>
+        <li>キーソルティング: レインボーテーブル攻撃への対策</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 55: KMS ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>AWS KMS</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-8">
+      <h3>暗号化キー管理</h3>
+      <ul class="dot-8">
+        <li>暗号化キーの作成と管理</li>
+        <li>S3、EBS、RDS等の暗号化に利用</li>
+        <li>カスタマー管理キー (CMK)</li>
+        <li>自動キーローテーション</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 56: Macie + Secrets Manager ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>Macie / Secrets Manager</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-8">
+      <h3>Amazon Macie</h3>
+      <ul class="dot-8">
+        <li>S3内の機密データ（PII）を自動検出</li>
+        <li>機械学習によるデータ分類</li>
+        <li>セキュリティリスクの評価</li>
+      </ul>
+    </div>
+    <div class="card border-8">
+      <h3>Secrets Manager</h3>
+      <ul class="dot-8">
+        <li>シークレット（APIキー等）の安全な保管</li>
+        <li>自動ローテーション</li>
+        <li>RDS、Redshift等との統合</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 57: Cognito ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>Amazon Cognito</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-8">
+      <h3>ユーザープール</h3>
+      <ul class="dot-8">
+        <li>サインアップ/サインイン機能</li>
+        <li>ソーシャルIDプロバイダー統合</li>
+        <li>MFA、パスワードポリシー</li>
+      </ul>
+    </div>
+    <div class="card border-8">
+      <h3>IDプール</h3>
+      <ul class="dot-8">
+        <li>一時的なAWS認証情報の発行</li>
+        <li>フェデレーテッドアイデンティティ</li>
+        <li>きめ細かなアクセス制御</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 58: Network Security ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-8">Section 8 - セキュリティ</h2>
+    <h1>ネットワークセキュリティ</h1>
+    <div class="header-line line-8"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-8">
+      <h3>VPC</h3>
+      <p>仮想プライベートクラウド。サブネット、セキュリティグループ、NACL。</p>
+    </div>
+    <div class="card border-8">
+      <h3>PrivateLink</h3>
+      <p>VPCエンドポイント経由のプライベート接続。インターネットを経由しない。</p>
+    </div>
+    <div class="card border-8">
+      <h3>WAF</h3>
+      <p>Webアプリケーションファイアウォール。SQLインジェクション、XSS対策。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 59: Section 9 Title ===== -->
+<div class="slide slide-section bg-9">
+  <div class="section-number">9</div>
+  <h2>SECTION 9</h2>
+  <h1>その他知っておくべきサービス</h1>
+  <p class="section-desc">アナリティクス、コンピュート、データベース、ネットワーク、運用</p>
+</div>
+
+<!-- ===== SLIDE 60: Analytics ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-9">Section 9 - その他のサービス</h2>
+    <h1>アナリティクス</h1>
+    <div class="header-line line-9"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-9">
+      <h3>Kinesis Data Streams</h3>
+      <p>リアルタイムストリーミングデータ収集と処理</p>
+    </div>
+    <div class="card border-9">
+      <h3>Amazon MSK</h3>
+      <p>Apache Kafkaのマネージドサービス</p>
+    </div>
+    <div class="card border-9">
+      <h3>QuickSight</h3>
+      <p>BIビジュアライゼーション。ダッシュボードと分析。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 61: Compute / Containers ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-9">Section 9 - その他のサービス</h2>
+    <h1>コンピュート / コンテナ</h1>
+    <div class="header-line line-9"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-9">
+      <h3>EC2</h3>
+      <ul class="dot-9">
+        <li>仮想マシン（インスタンスタイプ、ユーザーデータ）</li>
+        <li>GPU対応インスタンスでML推論</li>
+      </ul>
+    </div>
+    <div class="card border-9">
+      <h3>コンテナサービス</h3>
+      <ul class="dot-9">
+        <li>ECS: Dockerコンテナ管理（EC2/Fargate）</li>
+        <li>EKS: マネージドKubernetes</li>
+        <li>App Runner: Web/API簡易デプロイ</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 62: Database ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-9">Section 9 - その他のサービス</h2>
+    <h1>データベース</h1>
+    <div class="header-line line-9"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-9">
+      <h3>Aurora</h3>
+      <p>高性能リレーショナルDB。MySQL/PostgreSQL互換。</p>
+    </div>
+    <div class="card border-9">
+      <h3>ElastiCache</h3>
+      <p>インメモリキャッシュ（Redis / Memcached）</p>
+    </div>
+    <div class="card border-9">
+      <h3>Redshift</h3>
+      <p>データウェアハウス。ペタバイト規模のデータ分析。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 63: Network ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-9">Section 9 - その他のサービス</h2>
+    <h1>ネットワーク</h1>
+    <div class="header-line line-9"></div>
+  </div>
+  <div class="cards cards-3">
+    <div class="card border-9">
+      <h3>CloudFront</h3>
+      <p>CDN（エッジキャッシュ）。グローバル配信。</p>
+    </div>
+    <div class="card border-9">
+      <h3>Route 53</h3>
+      <p>DNS。ルーティングポリシー、ヘルスチェック。</p>
+    </div>
+    <div class="card border-9">
+      <h3>ELB</h3>
+      <p>ロードバランサー（ALB、NLB、CLB）。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 64: Migration ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-9">Section 9 - その他のサービス</h2>
+    <h1>マイグレーション</h1>
+    <div class="header-line line-9"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card border-9">
+      <h3>AWS DataSync</h3>
+      <p>大容量データ転送。オンプレミスからAWSへの効率的な移行。</p>
+    </div>
+    <div class="card border-9">
+      <h3>Transfer Family</h3>
+      <p>FTP / SFTP / FTPS。S3やEFSへのファイル転送。</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 65: Management ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 class="accent-9">Section 9 - その他のサービス</h2>
+    <h1>管理と運用</h1>
+    <div class="header-line line-9"></div>
+  </div>
+  <div class="cards cards-1">
+    <div class="card border-9">
+      <h3>AWS Systems Manager (SSM)</h3>
+      <ul class="dot-9">
+        <li>Session Manager: SSH不要のサーバー接続</li>
+        <li>Parameter Store: 設定とシークレットの管理</li>
+        <li>パッチマネージャー、オートメーション</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 66: Exam Tips ===== -->
+<div class="slide slide-content">
+  <div class="slide-header">
+    <h2 style="color:var(--orange);">試験対策</h2>
+    <h1>試験対策のヒント</h1>
+    <div class="header-line" style="background:var(--orange);"></div>
+  </div>
+  <div class="cards cards-2">
+    <div class="card">
+      <h3>学習方法</h3>
+      <ul>
+        <li>AWSドキュメントを活用する</li>
+        <li>模擬試験で弱点を把握する</li>
+        <li>ハンズオンで実践する</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3>試験のコツ</h3>
+      <ul>
+        <li>各サービスのユースケースを理解する</li>
+        <li>「最も適切な」選択肢を選ぶ</li>
+        <li>Bedrockの各機能を深く理解する</li>
+        <li>セキュリティのベストプラクティスを押さえる</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ===== SLIDE 67: End ===== -->
+<div class="slide slide-end">
+  <div class="aws-logo" style="font-size:18px;">AWS CERTIFIED AIP-C01</div>
+  <h1 style="color:var(--orange);">合格に向けて<br>頑張りましょう！</h1>
+  <p style="margin-top:20px;">Good Luck on Your Exam!</p>
+</div>
+
+</div><!-- end slides-container -->
+
+<script>
+(function() {
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+  const progressBar = document.getElementById('progress-bar');
+  const counter = document.getElementById('slide-counter');
+
+  function updateUI() {
+    progressBar.style.width = ((current + 1) / total * 100) + '%';
+    counter.textContent = (current + 1) + ' / ' + total;
+  }
+
+  function goTo(index, direction) {
+    if (index < 0 || index >= total || index === current) return;
+    const prev = slides[current];
+    const next = slides[index];
+    // Determine direction
+    const goingForward = index > current;
+    prev.classList.remove('active');
+    prev.classList.add(goingForward ? 'exit-left' : '');
+    prev.style.transform = goingForward ? 'translateX(-60px)' : 'translateX(60px)';
+    prev.style.opacity = '0';
+
+    next.style.transform = goingForward ? 'translateX(60px)' : 'translateX(-60px)';
+    next.style.opacity = '0';
+    next.classList.remove('exit-left');
+
+    // Force reflow
+    void next.offsetWidth;
+
+    next.classList.add('active');
+    next.style.transform = 'translateX(0)';
+    next.style.opacity = '1';
+
+    current = index;
+    updateUI();
+  }
+
+  // Expose for TOC links
+  window.goToSlide = function(n) {
+    // n is 1-indexed from the TOC, but we need to find the right slide
+    // The TOC numbers map to slide indices (0-based)
+    goTo(n - 1);
+  };
+
+  // Keyboard
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'ArrowDown') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === 'Home') {
+      e.preventDefault();
+      goTo(0);
+    } else if (e.key === 'End') {
+      e.preventDefault();
+      goTo(total - 1);
+    }
+  });
+
+  // Navigation buttons
+  document.getElementById('prev-btn').addEventListener('click', function() { goTo(current - 1); });
+  document.getElementById('next-btn').addEventListener('click', function() { goTo(current + 1); });
+
+  // Touch swipe
+  let touchStartX = 0, touchStartY = 0;
+  document.addEventListener('touchstart', function(e) {
+    touchStartX = e.changedTouches[0].screenX;
+    touchStartY = e.changedTouches[0].screenY;
+  }, { passive: true });
+  document.addEventListener('touchend', function(e) {
+    const dx = e.changedTouches[0].screenX - touchStartX;
+    const dy = e.changedTouches[0].screenY - touchStartY;
+    if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+      if (dx < 0) goTo(current + 1);
+      else goTo(current - 1);
+    }
+  }, { passive: true });
+
+  // Initialize
+  updateUI();
+  // Fix initial state - hide all non-active slides
+  slides.forEach(function(s, i) {
+    if (i !== 0) {
+      s.style.opacity = '0';
+      s.style.transform = 'translateX(60px)';
+    }
+  });
+})();
+</script>
+</body>
+</html>
